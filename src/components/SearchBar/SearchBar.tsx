@@ -1,13 +1,16 @@
+import { useRef } from "react";
+import css from "./SearchBar.module.css";
 import toast from "react-hot-toast";
-import styles from "./SearchBar.module.css";
 
-interface Props {
+interface SearchBarProps {
   onSubmit: (query: string) => void;
 }
 
-export default function SearchBar({ onSubmit }: Props) {
-  const handleSubmit = (formData: FormData) => {
-    const query = (formData.get("query") as string).trim();
+export default function SearchBar({ onSubmit }: SearchBarProps) {
+  const formRef = useRef<HTMLFormElement>(null);
+
+  async function formAction(formData: FormData) {
+    const query = formData.get("query")?.toString().trim();
 
     if (!query) {
       toast.error("Please enter your search query.");
@@ -15,29 +18,29 @@ export default function SearchBar({ onSubmit }: Props) {
     }
 
     onSubmit(query);
-  };
+  }
 
   return (
-    <header className={styles.header}>
-      <div className={styles.container}>
+    <header className={css.header}>
+      <div className={css.container}>
         <a
-          className={styles.link}
+          className={css.link}
           href="https://www.themoviedb.org/"
           target="_blank"
           rel="noopener noreferrer"
         >
           Powered by TMDB
         </a>
-        <form action={handleSubmit} className={styles.form}>
+        <form className={css.form} action={formAction} ref={formRef}>
           <input
-            className={styles.input}
+            className={css.input}
             type="text"
             name="query"
             autoComplete="off"
             placeholder="Search movies..."
             autoFocus
           />
-          <button className={styles.button} type="submit">
+          <button className={css.button} type="submit">
             Search
           </button>
         </form>
