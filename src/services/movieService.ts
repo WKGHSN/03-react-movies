@@ -15,13 +15,11 @@ export default async function fetchMovies(query: string): Promise<Movie[]> {
   try {
     const response = await axios.get<MovieApiResponse>(BASE_URL, {
       params: {
+        api_key: myToken,   
         query,
         include_adult: false,
         language: "en-US",
         page: 1,
-      },
-      headers: {
-        Authorization: `Bearer ${myToken}`,
       },
     });
 
